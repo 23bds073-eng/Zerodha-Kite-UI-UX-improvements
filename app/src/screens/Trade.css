@@ -1,0 +1,91 @@
+.current-price-card {
+  text-align: center;
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-base);
+}
+
+.current-price-label {
+  margin-bottom: var(--spacing-sm);
+}
+
+.current-price-value {
+  color: var(--neutral-900);
+}
+
+.order-type-section {
+  margin-bottom: var(--spacing-base);
+}
+
+.section-title {
+  margin-bottom: var(--spacing-md);
+  color: var(--neutral-900);
+}
+
+.order-type-card {
+  margin-bottom: var(--spacing-md);
+  cursor: pointer;
+  border: 2px solid var(--neutral-200);
+  transition: all 0.2s ease;
+}
+
+.order-type-card:hover {
+  border-color: var(--primary-300);
+}
+
+.order-type-card.selected {
+  border-color: var(--primary-500);
+  background: var(--primary-50);
+}
+
+.order-type-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-type-name {
+  color: var(--neutral-900);
+  margin-bottom: 4px;
+}
+
+.order-type-desc {
+  color: var(--neutral-600);
+}
+
+.radio-indicator {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--neutral-300);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-type-card.selected .radio-indicator {
+  border-color: var(--primary-500);
+}
+
+.radio-dot {
+  width: 12px;
+  height: 12px;
+  background: var(--primary-500);
+  border-radius: 50%;
+}
+
+.estimated-amount-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--neutral-50);
+  margin-bottom: var(--spacing-base);
+}
+
+.estimated-label {
+  color: var(--neutral-600);
+}
+
+.estimated-value {
+  color: var(--neutral-900);
+}
+

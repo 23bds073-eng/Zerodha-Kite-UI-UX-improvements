@@ -1,0 +1,46 @@
+.section-title {
+  margin-bottom: var(--spacing-md);
+  color: var(--neutral-900);
+}
+
+.index-card {
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-lg);
+}
+
+.index-name {
+  color: var(--neutral-700);
+  margin-bottom: var(--spacing-xs);
+}
+
+.index-value {
+  color: var(--neutral-900);
+  margin-bottom: var(--spacing-xs);
+}
+
+.index-change {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.stock-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-base);
+}
+
+.stock-list-name {
+  color: var(--neutral-900);
+}
+
+.stock-list-price {
+  color: var(--neutral-900);
+}
+
+.stock-list-change {
+  font-weight: 600;
+}
+

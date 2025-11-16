@@ -1,0 +1,106 @@
+.screen {
+  min-height: 100vh;
+  background: var(--neutral-50);
+  padding-bottom: 80px;
+}
+
+.screen-content {
+  padding: var(--spacing-base);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base);
+}
+
+.portfolio-card {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, white 100%);
+  margin-bottom: var(--spacing-sm);
+}
+
+.portfolio-label {
+  margin-bottom: var(--spacing-sm);
+}
+
+.portfolio-value {
+  margin-bottom: var(--spacing-sm);
+  color: var(--neutral-900);
+}
+
+.portfolio-change {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.stats-row {
+  display: flex;
+  gap: var(--spacing-base);
+}
+
+.stat-card {
+  flex: 1;
+  background: var(--neutral-50);
+}
+
+.stat-label {
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-value {
+  color: var(--neutral-900);
+}
+
+.quick-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin: var(--spacing-base) 0;
+}
+
+.section {
+  margin-top: var(--spacing-xl);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.section-title {
+  color: var(--neutral-900);
+}
+
+.section-link {
+  color: var(--primary-500);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.watchlist-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.market-index {
+  margin-bottom: var(--spacing-sm);
+}
+
+.index-name {
+  color: var(--neutral-700);
+  margin-bottom: var(--spacing-xs);
+}
+
+.index-value {
+  color: var(--neutral-900);
+  margin-bottom: var(--spacing-xs);
+}
+
+.index-change {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
