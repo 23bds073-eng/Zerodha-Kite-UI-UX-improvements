@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zerodha Kite - Trading App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Design System */
+        :root {
+            --primary-500: #2196F3;
+            --primary-700: #1976D2;
+            --primary-50: #E3F2FD;
+            --success-500: #4CAF50;
+            --success-700: #388E3C;
+            --error-500: #F44336;
+            --error-700: #D32F2F;
+            --neutral-50: #FAFAFA;
+            --neutral-100: #F5F5F5;
+            --neutral-200: #EEEEEE;
+            --neutral-300: #E0E0E0;
+            --neutral-500: #9E9E9E;
+            --neutral-600: #757575;
+            --neutral-700: #616161;
+            --neutral-900: #212121;
+            --market-positive: #4CAF50;
+            --market-negative: #F44336;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-base: 16px;
+            --spacing-lg: 20px;
+            --spacing-xl: 24px;
+            --radius-md: 8px;
+            --radius-base: 12px;
+            --radius-lg: 16px;
+            --shadow-1: 0px 1px 2px rgba(0,0,0,0.05), 0px 1px 3px rgba(0,0,0,0.1);
+            --shadow-2: 0px 2px 4px rgba(0,0,0,0.05), 0px 4px 6px rgba(0,0,0,0.1);
+            --shadow-3: 0px 4px 6px rgba(0,0,0,0.05), 0px 10px 15px rgba(0,0,0,0.1);
+            --shadow-4: 0px 10px 15px rgba(0,0,0,0.05), 0px 20px 25px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--neutral-50);
+            color: var(--neutral-900);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app {
+            max-width: 428px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            height: 56px;
+            background: white;
+            box-shadow: var(--shadow-1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--spacing-base);
+            z-index: 99;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .top-bar-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .top-bar-back {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* Screen Content */
+        .screen-content {
+            padding: var(--spacing-base);
+            padding-bottom: 80px;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: var(--radius-base);
+            box-shadow: var(--shadow-1);
+            padding: var(--spacing-base);
+        }
+
+        .card-elevated {
+            box-shadow: var(--shadow-3);
+            padding: var(--spacing-xl);
+        }
+
+        /* Portfolio Card */
+        .portfolio-card {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, white 100%);
+            text-align: center;
+            margin-bottom: var(--spacing-base);
+        }
+
+        .portfolio-label {
+            font-size: 14px;
+            color: var(--neutral-600);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .portfolio-value {
+            font-size: 36px;
+            font-weight: 600;
+            font-family: 'SF Mono', Monaco, monospace;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .portfolio-change {
+            font-size: 22px;
+            font-weight: 500;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        .text-positive {
+            color: var(--market-positive);
+        }
+
+        .text-negative {
+            color: var(--market-negative);
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            gap: var(--spacing-base);
+            margin-bottom: var(--spacing-base);
+        }
+
+        .stat-card {
+            flex: 1;
+            background: var(--neutral-50);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--neutral-600);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'SF Mono', Monaco, monospace;
+            color: var(--neutral-900);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-base);
+        }
+
+        .btn {
+            flex: 1;
+            height: 48px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-buy {
+            background: var(--success-500);
+            color: white;
+            box-shadow: var(--shadow-2);
+        }
+
+        .btn-buy:hover {
+            background: var(--success-700);
+        }
+
+        .btn-sell {
+            background: var(--error-500);
+            color: white;
+            box-shadow: var(--shadow-2);
+        }
+
+        .btn-sell:hover {
+            background: var(--error-700);
+        }
+
+        .btn-primary {
+            background: var(--primary-500);
+            color: white;
+            box-shadow: var(--shadow-2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-700);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-500);
+            border: 1px solid var(--primary-500);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-50);
+        }
+
+        .btn-tertiary {
+            background: var(--neutral-100);
+            color: var(--neutral-900);
+        }
+
+        .btn-tertiary:hover {
+            background: var(--neutral-200);
+        }
+
+        /* Section */
+        .section {
+            margin-top: var(--spacing-xl);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .section-link {
+            font-size: 14px;
+            color: var(--primary-500);
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* Stock Item */
+        .stock-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-base);
+            background: white;
+            border-bottom: 1px solid var(--neutral-200);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .stock-item:hover {
+            background: var(--neutral-50);
+        }
+
+        .stock-item-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stock-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--primary-100);
+            color: var(--primary-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .stock-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stock-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--neutral-900);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .stock-symbol {
+            font-size: 12px;
+            color: var(--neutral-600);
+        }
+
+        .stock-item-right {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .stock-price {
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'SF Mono', Monaco, monospace;
+            color: var(--neutral-900);
+            margin-bottom: 2px;
+        }
+
+        .stock-change {
+            font-size: 13px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: var(--spacing-sm);
+            border-bottom: 1px solid var(--neutral-200);
+            margin-bottom: var(--spacing-base);
+        }
+
+        .tab {
+            padding: var(--spacing-md) var(--spacing-base);
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--neutral-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab:hover {
+            color: var(--neutral-900);
+        }
+
+        .tab.active {
+            color: var(--primary-500);
+            font-weight: 600;
+            border-bottom-color: var(--primary-500);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-base);
+            background: white;
+            border-radius: var(--radius-base);
+            margin-bottom: var(--spacing-base);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: var(--neutral-900);
+            background: transparent;
+        }
+
+        .search-input::placeholder {
+            color: var(--neutral-500);
+        }
+
+        .search-count {
+            font-size: 12px;
+            color: var(--neutral-600);
+            white-space: nowrap;
+        }
+
+        /* Filter Button */
+        .filter-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--neutral-600);
+        }
+
+        /* Market Index */
+        .market-index {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .index-name {
+            font-size: 16px;
+            color: var(--neutral-700);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .index-value {
+            font-size: 22px;
+            font-weight: 600;
+            font-family: 'SF Mono', Monaco, monospace;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .index-change {
+            font-size: 14px;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 428px;
+            height: 64px;
+            background: white;
+            box-shadow: var(--shadow-4);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 12px;
+            color: var(--neutral-500);
+            transition: all 0.2s ease;
+            min-width: 60px;
+        }
+
+        .bottom-nav-item:hover {
+            color: var(--primary-500);
+        }
+
+        .bottom-nav-item.active {
+            color: var(--primary-500);
+        }
+
+        .bottom-nav-icon {
+            font-size: 20px;
+        }
+
+        .bottom-nav-label {
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        /* Orders */
+        .order-item {
+            padding: var(--spacing-base);
+            background: white;
+            border-radius: var(--radius-base);
+            margin-bottom: var(--spacing-sm);
+            box-shadow: var(--shadow-1);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .order-symbol {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .order-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .order-status.pending {
+            background: var(--warning-50);
+            color: var(--warning-500);
+        }
+
+        .order-status.executed {
+            background: var(--success-50);
+            color: var(--success-700);
+        }
+
+        .order-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--neutral-600);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .order-amount {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'SF Mono', Monaco, monospace;
+            color: var(--neutral-900);
+        }
+
+        /* Positions */
+        .position-item {
+            padding: var(--spacing-base);
+            background: white;
+            border-radius: var(--radius-base);
+            margin-bottom: var(--spacing-sm);
+            box-shadow: var(--shadow-1);
+        }
+
+        .position-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .position-pnl {
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        /* Holdings */
+        .holding-item {
+            padding: var(--spacing-base);
+            background: white;
+            border-radius: var(--radius-base);
+            margin-bottom: var(--spacing-sm);
+            box-shadow: var(--shadow-1);
+            cursor: pointer;
+        }
+
+        .holding-item:hover {
+            box-shadow: var(--shadow-2);
+        }
+
+        /* Hidden screens */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Funds */
+        .funds-summary {
+            text-align: center;
+            padding: var(--spacing-xl);
+            background: white;
+            border-radius: var(--radius-base);
+            margin-bottom: var(--spacing-base);
+            box-shadow: var(--shadow-1);
+        }
+
+        .funds-amount {
+            font-size: 36px;
+            font-weight: 600;
+            font-family: 'SF Mono', Monaco, monospace;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* Input */
+        .input-group {
+            margin-bottom: var(--spacing-base);
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .input-field {
+            width: 100%;
+            height: 48px;
+            padding: 12px 16px;
+            border: 1px solid var(--neutral-300);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            color: var(--neutral-900);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border: 2px solid var(--primary-500);
+            box-shadow: 0 0 0 4px var(--primary-50);
+        }
+
+        /* Quick Amount Buttons */
+        .quick-amounts {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-base);
+        }
+
+        .quick-amount-btn {
+            flex: 1;
+            padding: var(--spacing-sm) var(--spacing-base);
+            border: 1px solid var(--neutral-300);
+            border-radius: var(--radius-md);
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-amount-btn:hover {
+            border-color: var(--primary-500);
+            background: var(--primary-50);
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Home Screen -->
+        <div id="home-screen" class="screen active">
+            <div class="top-bar">
+                <div class="top-bar-title">Zerodha Kite</div>
+                <div>
+                    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:8px;">🔔</button>
+                    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:8px;">👤</button>
+                </div>
+            </div>
+            <div class="screen-content">
+                <!-- Portfolio Summary -->
+                <div class="card card-elevated portfolio-card">
+                    <div class="portfolio-label">Portfolio Value</div>
+                    <div class="portfolio-value">₹1,25,000.00</div>
+                    <div class="portfolio-change text-positive">+₹2,500.00 (+2.04%) ↑</div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="stats-row">
+                    <div class="card stat-card">
+                        <div class="stat-label">Funds</div>
+                        <div class="stat-value">₹50,000</div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-label">P&L</div>
+                        <div class="stat-value text-positive">+₹5,000</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="btn btn-buy" onclick="showScreen('trade-screen'); setTradeAction('buy')">Buy</button>
+                    <button class="btn btn-sell" onclick="showScreen('trade-screen'); setTradeAction('sell')">Sell</button>
+                    <button class="btn btn-tertiary" onclick="showScreen('funds-screen')">Add Funds</button>
+                </div>
+
+                <!-- Watchlist -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">Watchlist</div>
+                        <button class="section-link" onclick="showScreen('watchlist-screen')">View All</button>
+                    </div>
+                    <div class="stock-item" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">R</div>
+                            <div class="stock-info">
+                                <div class="stock-name">Reliance Industries</div>
+                                <div class="stock-symbol">RELIANCE</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price">₹2,450.00</div>
+                            <div class="stock-change text-positive">+₹29.00 (+1.20%) ↑</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">T</div>
+                            <div class="stock-info">
+                                <div class="stock-name">Tata Consultancy Services</div>
+                                <div class="stock-symbol">TCS</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price">₹3,200.00</div>
+                            <div class="stock-change text-negative">-₹16.00 (-0.50%) ↓</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">I</div>
+                            <div class="stock-info">
+                                <div class="stock-name">Infosys</div>
+                                <div class="stock-symbol">INFY</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price">₹1,800.00</div>
+                            <div class="stock-change text-positive">+₹37.00 (+2.10%) ↑</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Overview -->
+                <div class="section">
+                    <div class="section-title">Market Overview</div>
+                    <div class="card market-index">
+                        <div class="index-name">NIFTY 50</div>
+                        <div class="index-value">18,500.00</div>
+                        <div class="index-change text-positive">+150.00 (+0.82%) ↑</div>
+                    </div>
+                    <div class="card market-index">
+                        <div class="index-name">SENSEX</div>
+                        <div class="index-value">62,000.00</div>
+                        <div class="index-change text-positive">+420.00 (+0.68%) ↑</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Watchlist Screen -->
+        <div id="watchlist-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="top-bar-back" onclick="showScreen('home-screen')">←</button>
+                    <div class="top-bar-title">Watchlist</div>
+                </div>
+                <div>
+                    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:8px;">🔍</button>
+                    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:8px;">+</button>
+                </div>
+            </div>
+            <div class="screen-content">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" onclick="switchWatchlistTab('favorites')">Favorites</button>
+                    <button class="tab" onclick="switchWatchlistTab('mylist')">My list</button>
+                    <button class="tab" onclick="switchWatchlistTab('mustwatch')">Must watch</button>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <span>🔍</span>
+                    <input type="text" class="search-input" placeholder="Search & add" id="watchlist-search">
+                    <span class="search-count" id="watchlist-count">10/100</span>
+                    <button class="filter-btn">⚙️</button>
+                </div>
+
+                <!-- Watchlist Items -->
+                <div id="watchlist-items">
+                    <div class="stock-item" data-name="SENSEX" data-symbol="SENSEX" data-company="SENSEX Index" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">S</div>
+                            <div class="stock-info">
+                                <div class="stock-name">SENSEX</div>
+                                <div class="stock-symbol">INDICES</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-negative">61,560.64</div>
+                            <div class="stock-change text-negative">-371.83 (-0.60%) ↓</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" data-name="NIFTY 50" data-symbol="NIFTY" data-company="NIFTY 50 Index" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">N</div>
+                            <div class="stock-info">
+                                <div class="stock-name">NIFTY 50</div>
+                                <div class="stock-symbol">INDICES</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-negative">18,181.75</div>
+                            <div class="stock-change text-negative">-104.75 (-0.57%) ↓</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" data-name="TCS" data-symbol="TCS" data-company="Tata Consultancy Services" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">T</div>
+                            <div class="stock-info">
+                                <div class="stock-name">TCS</div>
+                                <div class="stock-symbol">Tata Consultancy Services</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-negative">3,200.00</div>
+                            <div class="stock-change text-negative">-16.00 (-0.50%) ↓</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" data-name="RELIANCE" data-symbol="RELIANCE" data-company="Reliance Industries" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">R</div>
+                            <div class="stock-info">
+                                <div class="stock-name">RELIANCE</div>
+                                <div class="stock-symbol">Reliance Industries</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-negative">2,439.30</div>
+                            <div class="stock-change text-negative">-10.70 (-0.44%) ↓</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" data-name="INFY" data-symbol="INFY" data-company="Infosys" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">I</div>
+                            <div class="stock-info">
+                                <div class="stock-name">INFY</div>
+                                <div class="stock-symbol">Infosys</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-positive">1,800.00</div>
+                            <div class="stock-change text-positive">+37.00 (+2.10%) ↑</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" data-name="ASTRON" data-symbol="ASTRON" data-company="Astron Paper" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">A</div>
+                            <div class="stock-info">
+                                <div class="stock-name">ASTRON</div>
+                                <div class="stock-symbol">Astron Paper</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-negative">26.05</div>
+                            <div class="stock-change text-negative">-0.35 (-1.32%) ↓</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" data-name="ASIANPAINT" data-symbol="ASIANPAINT" data-company="Asian Paints" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">A</div>
+                            <div class="stock-info">
+                                <div class="stock-name">ASIANPAINT</div>
+                                <div class="stock-symbol">Asian Paints</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-negative">3,092.45</div>
+                            <div class="stock-change text-negative">-45.65 (-1.45%) ↓</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" data-name="RITES" data-symbol="RITES" data-company="RITES Limited" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">R</div>
+                            <div class="stock-info">
+                                <div class="stock-name">RITES</div>
+                                <div class="stock-symbol">RITES Limited</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-positive">396.50</div>
+                            <div class="stock-change text-positive">+8.15 (+2.09%) ↑</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" data-name="BHEL" data-symbol="BHEL" data-company="Bharat Heavy Electricals" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">B</div>
+                            <div class="stock-info">
+                                <div class="stock-name">BHEL</div>
+                                <div class="stock-symbol">Bharat Heavy Electricals</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-positive">82.30</div>
+                            <div class="stock-change text-positive">+0.74 (+0.90%) ↑</div>
+                        </div>
+                    </div>
+                    <div class="stock-item" data-name="HDFCBANK" data-symbol="HDFCBANK" data-company="HDFC Bank" onclick="showScreen('stock-screen')">
+                        <div class="stock-item-left">
+                            <div class="stock-icon">H</div>
+                            <div class="stock-info">
+                                <div class="stock-name">HDFCBANK</div>
+                                <div class="stock-symbol">HDFC Bank</div>
+                            </div>
+                        </div>
+                        <div class="stock-item-right">
+                            <div class="stock-price text-positive">1,650.00</div>
+                            <div class="stock-change text-positive">+8.00 (+0.49%) ↑</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="no-results" style="display:none;text-align:center;padding:40px 20px;color:var(--neutral-600);">
+                    <div style="font-size:48px;margin-bottom:16px;">🔍</div>
+                    <div style="font-size:16px;font-weight:600;margin-bottom:8px;color:var(--neutral-900);">No results found</div>
+                    <div style="font-size:14px;">Try searching with a different term</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Details Screen -->
+        <div id="stock-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="top-bar-back" onclick="showScreen('watchlist-screen')">←</button>
+                    <div class="top-bar-title">RELIANCE</div>
+                </div>
+                <div>
+                    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:8px;">⭐</button>
+                    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:8px;">📤</button>
+                </div>
+            </div>
+            <div class="screen-content">
+                <div style="text-align:center;padding:24px 16px;">
+                    <div style="font-size:45px;font-weight:600;font-family:'SF Mono',monospace;margin-bottom:8px;">₹2,450.00</div>
+                    <div class="text-positive" style="font-size:22px;font-family:'SF Mono',monospace;">+₹29.00 (+1.20%) ↑</div>
+                </div>
+                <div class="card" style="height:300px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                    <div style="text-align:center;color:var(--neutral-600);">
+                        <div>Chart Visualization</div>
+                        <div style="font-size:12px;margin-top:4px;">Price chart would appear here</div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:4px;background:var(--neutral-100);padding:4px;border-radius:8px;margin-bottom:16px;">
+                    <button style="flex:1;height:40px;border:none;background:var(--primary-100);border-radius:6px;color:var(--primary-700);font-weight:600;cursor:pointer;">1D</button>
+                    <button style="flex:1;height:40px;border:none;background:white;border-radius:6px;color:var(--neutral-700);cursor:pointer;">1W</button>
+                    <button style="flex:1;height:40px;border:none;background:white;border-radius:6px;color:var(--neutral-700);cursor:pointer;">1M</button>
+                    <button style="flex:1;height:40px;border:none;background:white;border-radius:6px;color:var(--neutral-700);cursor:pointer;">3M</button>
+                    <button style="flex:1;height:40px;border:none;background:white;border-radius:6px;color:var(--neutral-700);cursor:pointer;">1Y</button>
+                    <button style="flex:1;height:40px;border:none;background:white;border-radius:6px;color:var(--neutral-700);cursor:pointer;">All</button>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;">
+                    <div class="card" style="padding:12px;text-align:center;">
+                        <div style="font-size:11px;color:var(--neutral-600);margin-bottom:4px;">Open</div>
+                        <div style="font-size:16px;font-weight:600;font-family:'SF Mono',monospace;">₹2,430.00</div>
+                    </div>
+                    <div class="card" style="padding:12px;text-align:center;">
+                        <div style="font-size:11px;color:var(--neutral-600);margin-bottom:4px;">High</div>
+                        <div style="font-size:16px;font-weight:600;font-family:'SF Mono',monospace;color:var(--market-positive);">₹2,455.00</div>
+                    </div>
+                    <div class="card" style="padding:12px;text-align:center;">
+                        <div style="font-size:11px;color:var(--neutral-600);margin-bottom:4px;">Low</div>
+                        <div style="font-size:16px;font-weight:600;font-family:'SF Mono',monospace;color:var(--market-negative);">₹2,420.00</div>
+                    </div>
+                    <div class="card" style="padding:12px;text-align:center;">
+                        <div style="font-size:11px;color:var(--neutral-600);margin-bottom:4px;">Volume</div>
+                        <div style="font-size:16px;font-weight:600;font-family:'SF Mono',monospace;">2.5M</div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:12px;margin-bottom:16px;">
+                    <button class="btn btn-buy" style="flex:1;height:56px;" onclick="showScreen('trade-screen'); setTradeAction('buy')">Buy</button>
+                    <button class="btn btn-sell" style="flex:1;height:56px;" onclick="showScreen('trade-screen'); setTradeAction('sell')">Sell</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trade Screen -->
+        <div id="trade-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="top-bar-back" onclick="showScreen('home-screen')">←</button>
+                    <div class="top-bar-title" id="trade-title">Buy RELIANCE</div>
+                </div>
+            </div>
+            <div class="screen-content">
+                <div class="card" style="text-align:center;padding:20px;margin-bottom:16px;">
+                    <div style="font-size:14px;color:var(--neutral-600);margin-bottom:8px;">Current Price</div>
+                    <div style="font-size:36px;font-weight:600;font-family:'SF Mono',monospace;">₹2,450.00</div>
+                </div>
+                <div style="margin-bottom:16px;">
+                    <div class="section-title" style="margin-bottom:12px;">Order Type</div>
+                    <div class="card" style="margin-bottom:12px;cursor:pointer;border:2px solid var(--primary-500);background:var(--primary-50);" onclick="setOrderType('Market')">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <div style="font-size:16px;font-weight:600;" id="order-type-market">● Market</div>
+                                <div style="font-size:12px;color:var(--neutral-600);">Execute at market price</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-bottom:12px;cursor:pointer;border:2px solid var(--neutral-200);" onclick="setOrderType('Limit')">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <div style="font-size:16px;font-weight:500;" id="order-type-limit">Limit</div>
+                                <div style="font-size:12px;color:var(--neutral-600);">Set your price</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-bottom:12px;cursor:pointer;border:2px solid var(--neutral-200);" onclick="setOrderType('Stop Loss')">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <div style="font-size:16px;font-weight:500;" id="order-type-sl">Stop Loss</div>
+                                <div style="font-size:12px;color:var(--neutral-600);">Trigger at price</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Quantity</label>
+                    <input type="number" class="input-field" placeholder="Enter quantity" id="trade-quantity">
+                </div>
+                <div class="input-group" id="price-input-group" style="display:none;">
+                    <label class="input-label">Price per Share</label>
+                    <input type="number" class="input-field" placeholder="Enter price" id="trade-price">
+                </div>
+                <div class="card" id="estimated-amount" style="display:none;justify-content:space-between;align-items:center;background:var(--neutral-50);">
+                    <div style="font-size:14px;color:var(--neutral-600);">Estimated Amount</div>
+                    <div style="font-size:22px;font-weight:600;font-family:'SF Mono',monospace;" id="estimated-value">₹0.00</div>
+                </div>
+                <button class="btn btn-primary" style="width:100%;height:56px;margin-top:16px;" onclick="reviewOrder()">Review Order</button>
+            </div>
+        </div>
+
+        <!-- Orders Screen -->
+        <div id="orders-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="top-bar-back" onclick="showScreen('home-screen')">←</button>
+                    <div class="top-bar-title">Orders</div>
+                </div>
+                <div>
+                    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:8px;">⚙️</button>
+                </div>
+            </div>
+            <div class="screen-content">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchOrderTab('pending')">Pending</button>
+                    <button class="tab" onclick="switchOrderTab('executed')">Executed</button>
+                    <button class="tab" onclick="switchOrderTab('history')">History</button>
+                </div>
+                <div id="orders-content">
+                    <div class="order-item">
+                        <div class="order-header">
+                            <div class="order-symbol">RELIANCE</div>
+                            <div class="order-status pending">Pending</div>
+                        </div>
+                        <div class="order-details">
+                            <span>Buy | Market | 10 shares</span>
+                        </div>
+                        <div class="order-amount">₹24,500.00</div>
+                        <button class="btn btn-secondary" style="width:100%;margin-top:12px;" onclick="cancelOrder()">Cancel</button>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-header">
+                            <div class="order-symbol">TCS</div>
+                            <div class="order-status executed">Executed</div>
+                        </div>
+                        <div class="order-details">
+                            <span>Buy | Market | 5 shares</span>
+                            <span>Executed at 10:23 AM</span>
+                        </div>
+                        <div class="order-amount">₹16,000.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Screen -->
+        <div id="portfolio-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-title">Portfolio</div>
+                <div>
+                    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:8px;">⚙️</button>
+                </div>
+            </div>
+            <div class="screen-content">
+                <div class="card card-elevated portfolio-card">
+                    <div class="portfolio-label">Total Value</div>
+                    <div class="portfolio-value">₹1,25,000.00</div>
+                    <div class="portfolio-change text-positive">+₹5,000.00 (+4.17%) ↑</div>
+                </div>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchPortfolioTab('holdings')">Holdings</button>
+                    <button class="tab" onclick="switchPortfolioTab('positions')">Positions</button>
+                    <button class="tab" onclick="switchPortfolioTab('pnl')">P&L</button>
+                </div>
+                <div id="portfolio-content">
+                    <div class="holding-item" onclick="showScreen('stock-screen')">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                            <div>
+                                <div style="font-size:16px;font-weight:600;margin-bottom:4px;">RELIANCE</div>
+                                <div style="font-size:12px;color:var(--neutral-600);">10 shares</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-size:22px;font-weight:600;font-family:'SF Mono',monospace;">₹24,500.00</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--neutral-200);">
+                            <div style="font-size:14px;color:var(--neutral-700);">
+                                <span>Avg: ₹2,400.00</span>
+                                <span> | </span>
+                                <span>Current: ₹2,450.00</span>
+                            </div>
+                            <div class="text-positive" style="font-size:14px;font-weight:600;">+₹500.00 (+2.08%)</div>
+                        </div>
+                    </div>
+                    <div class="holding-item" onclick="showScreen('stock-screen')">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                            <div>
+                                <div style="font-size:16px;font-weight:600;margin-bottom:4px;">TCS</div>
+                                <div style="font-size:12px;color:var(--neutral-600);">5 shares</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-size:22px;font-weight:600;font-family:'SF Mono',monospace;">₹16,000.00</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--neutral-200);">
+                            <div style="font-size:14px;color:var(--neutral-700);">
+                                <span>Avg: ₹3,100.00</span>
+                                <span> | </span>
+                                <span>Current: ₹3,200.00</span>
+                            </div>
+                            <div class="text-positive" style="font-size:14px;font-weight:600;">+₹500.00 (+3.23%)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Positions Screen -->
+        <div id="positions-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="top-bar-back" onclick="showScreen('portfolio-screen')">←</button>
+                    <div class="top-bar-title">Positions</div>
+                </div>
+            </div>
+            <div class="screen-content">
+                <div class="position-item">
+                    <div class="position-header">
+                        <div>
+                            <div style="font-size:16px;font-weight:600;margin-bottom:4px;">RELIANCE</div>
+                            <div style="font-size:14px;color:var(--neutral-600);">Buy | 10 shares</div>
+                        </div>
+                        <div class="position-pnl text-positive">+₹500.00 (+2.08%)</div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:14px;color:var(--neutral-600);">
+                        <span>Avg: ₹2,400.00</span>
+                        <span>LTP: ₹2,450.00</span>
+                    </div>
+                    <button class="btn btn-sell" style="width:100%;margin-top:12px;">Close Position</button>
+                </div>
+                <div class="position-item">
+                    <div class="position-header">
+                        <div>
+                            <div style="font-size:16px;font-weight:600;margin-bottom:4px;">TCS</div>
+                            <div style="font-size:14px;color:var(--neutral-600);">Buy | 5 shares</div>
+                        </div>
+                        <div class="position-pnl text-positive">+₹500.00 (+3.23%)</div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:14px;color:var(--neutral-600);">
+                        <span>Avg: ₹3,100.00</span>
+                        <span>LTP: ₹3,200.00</span>
+                    </div>
+                    <button class="btn btn-sell" style="width:100%;margin-top:12px;">Close Position</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Funds Screen -->
+        <div id="funds-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="top-bar-back" onclick="showScreen('home-screen')">←</button>
+                    <div class="top-bar-title">Add Funds</div>
+                </div>
+            </div>
+            <div class="screen-content">
+                <div class="funds-summary">
+                    <div style="font-size:14px;color:var(--neutral-600);margin-bottom:8px;">Available Balance</div>
+                    <div class="funds-amount">₹50,000.00</div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Amount to Add</label>
+                    <input type="number" class="input-field" placeholder="Enter amount" id="funds-amount">
+                </div>
+                <div class="quick-amounts">
+                    <button class="quick-amount-btn" onclick="setFundsAmount(5000)">₹5K</button>
+                    <button class="quick-amount-btn" onclick="setFundsAmount(10000)">₹10K</button>
+                    <button class="quick-amount-btn" onclick="setFundsAmount(25000)">₹25K</button>
+                    <button class="quick-amount-btn" onclick="setFundsAmount(50000)">₹50K</button>
+                </div>
+                <div style="margin-bottom:16px;">
+                    <div class="section-title" style="margin-bottom:12px;">Payment Method</div>
+                    <div class="card" style="margin-bottom:12px;cursor:pointer;border:2px solid var(--primary-500);background:var(--primary-50);">
+                        <div style="font-size:16px;font-weight:600;">● UPI</div>
+                        <div style="font-size:12px;color:var(--neutral-600);margin-top:4px;">Pay via UPI</div>
+                    </div>
+                    <div class="card" style="margin-bottom:12px;cursor:pointer;border:2px solid var(--neutral-200);">
+                        <div style="font-size:16px;font-weight:500;">Net Banking</div>
+                        <div style="font-size:12px;color:var(--neutral-600);margin-top:4px;">Bank transfer</div>
+                    </div>
+                    <div class="card" style="margin-bottom:12px;cursor:pointer;border:2px solid var(--neutral-200);">
+                        <div style="font-size:16px;font-weight:500;">IMPS</div>
+                        <div style="font-size:12px;color:var(--neutral-600);margin-top:4px;">Instant transfer</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width:100%;height:56px;">Continue</button>
+            </div>
+        </div>
+
+        <!-- Markets Screen -->
+        <div id="markets-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-title">Markets</div>
+                <div>
+                    <button style="background:none;border:none;font-size:20px;cursor:pointer;padding:8px;">⚙️</button>
+                </div>
+            </div>
+            <div class="screen-content">
+                <div class="section-title" style="margin-bottom:12px;">Indices</div>
+                <div class="card market-index">
+                    <div class="index-name">NIFTY 50</div>
+                    <div class="index-value">18,500.00</div>
+                    <div class="index-change text-positive">+150.00 (+0.82%) ↑</div>
+                </div>
+                <div class="card market-index">
+                    <div class="index-name">SENSEX</div>
+                    <div class="index-value">62,000.00</div>
+                    <div class="index-change text-positive">+420.00 (+0.68%) ↑</div>
+                </div>
+                <div class="section-title" style="margin-top:24px;margin-bottom:12px;">Top Gainers</div>
+                <div class="stock-item" onclick="showScreen('stock-screen')">
+                    <div class="stock-item-left">
+                        <div class="stock-icon">I</div>
+                        <div class="stock-info">
+                            <div class="stock-name">INFY</div>
+                            <div class="stock-symbol">Infosys</div>
+                        </div>
+                    </div>
+                    <div class="stock-item-right">
+                        <div class="stock-price text-positive">₹1,800</div>
+                        <div class="stock-change text-positive">+2.10% ↑</div>
+                    </div>
+                </div>
+                <div class="stock-item" onclick="showScreen('stock-screen')">
+                    <div class="stock-item-left">
+                        <div class="stock-icon">R</div>
+                        <div class="stock-info">
+                            <div class="stock-name">RELIANCE</div>
+                            <div class="stock-symbol">Reliance Industries</div>
+                        </div>
+                    </div>
+                    <div class="stock-item-right">
+                        <div class="stock-price text-positive">₹2,450</div>
+                        <div class="stock-change text-positive">+1.20% ↑</div>
+                    </div>
+                </div>
+                <div class="section-title" style="margin-top:24px;margin-bottom:12px;">Top Losers</div>
+                <div class="stock-item" onclick="showScreen('stock-screen')">
+                    <div class="stock-item-left">
+                        <div class="stock-icon">T</div>
+                        <div class="stock-info">
+                            <div class="stock-name">TCS</div>
+                            <div class="stock-symbol">Tata Consultancy</div>
+                        </div>
+                    </div>
+                    <div class="stock-item-right">
+                        <div class="stock-price text-negative">₹3,200</div>
+                        <div class="stock-change text-negative">-0.50% ↓</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bids Screen -->
+        <div id="bids-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-title">Bids</div>
+            </div>
+            <div class="screen-content">
+                <div style="text-align:center;padding:40px 20px;color:var(--neutral-600);">
+                    <div style="font-size:48px;margin-bottom:16px;">📊</div>
+                    <div style="font-size:18px;font-weight:600;margin-bottom:8px;color:var(--neutral-900);">Bids & Offers</div>
+                    <div style="font-size:14px;">View and manage your bid orders</div>
+                </div>
+                <div class="card" style="text-align:center;padding:20px;">
+                    <div style="font-size:14px;color:var(--neutral-600);margin-bottom:8px;">No active bids</div>
+                    <button class="btn btn-primary" style="margin-top:12px;" onclick="showScreen('trade-screen')">Place a Bid</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- More/Demo Screen -->
+        <div id="more-screen" class="screen">
+            <div class="top-bar">
+                <div class="top-bar-title">Demo Account</div>
+            </div>
+            <div class="screen-content">
+                <div style="display:flex;align-items:center;gap:16px;padding:16px;margin-bottom:24px;">
+                    <div style="width:64px;height:64px;border-radius:50%;background:var(--primary-500);color:white;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:600;">JD</div>
+                    <div>
+                        <div style="font-size:22px;font-weight:600;margin-bottom:4px;">John Doe</div>
+                        <div style="font-size:14px;color:var(--neutral-600);">john.doe@email.com</div>
+                    </div>
+                </div>
+                <div style="margin-bottom:24px;">
+                    <div style="font-size:14px;font-weight:600;color:var(--neutral-600);text-transform:uppercase;padding:0 16px 8px;letter-spacing:0.5px;">Account</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">Personal Information →</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">Bank Accounts →</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">Tax Information →</div>
+                </div>
+                <div style="margin-bottom:24px;">
+                    <div style="font-size:14px;font-weight:600;color:var(--neutral-600);text-transform:uppercase;padding:0 16px 8px;letter-spacing:0.5px;">Trading</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">Trading Preferences →</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">Risk Profile →</div>
+                </div>
+                <div style="margin-bottom:24px;">
+                    <div style="font-size:14px;font-weight:600;color:var(--neutral-600);text-transform:uppercase;padding:0 16px 8px;letter-spacing:0.5px;">App</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">Notifications →</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">Appearance →</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">Security →</div>
+                </div>
+                <div style="margin-bottom:24px;">
+                    <div style="font-size:14px;font-weight:600;color:var(--neutral-600);text-transform:uppercase;padding:0 16px 8px;letter-spacing:0.5px;">Support</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">Help & Support →</div>
+                    <div class="card" style="margin-bottom:8px;cursor:pointer;">About →</div>
+                </div>
+                <button class="btn btn-sell" style="width:100%;margin-top:24px;">Logout</button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <button class="bottom-nav-item active" onclick="showScreen('watchlist-screen'); updateBottomNav(0)">
+                <div class="bottom-nav-icon">📖</div>
+                <div class="bottom-nav-label">Watchlist</div>
+            </button>
+            <button class="bottom-nav-item" onclick="showScreen('orders-screen'); updateBottomNav(1)">
+                <div class="bottom-nav-icon">📋</div>
+                <div class="bottom-nav-label">Orders</div>
+            </button>
+            <button class="bottom-nav-item" onclick="showScreen('portfolio-screen'); updateBottomNav(2)">
+                <div class="bottom-nav-icon">💼</div>
+                <div class="bottom-nav-label">Portfolio</div>
+            </button>
+            <button class="bottom-nav-item" onclick="showScreen('bids-screen'); updateBottomNav(3)">
+                <div class="bottom-nav-icon">🔨</div>
+                <div class="bottom-nav-label">Bids</div>
+            </button>
+            <button class="bottom-nav-item" onclick="showScreen('more-screen'); updateBottomNav(4)">
+                <div class="bottom-nav-icon">👤</div>
+                <div class="bottom-nav-label">Demo</div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentTradeAction = 'buy';
+        let currentOrderType = 'Market';
+
+        // Search functionality for watchlist
+        function filterWatchlist() {
+            const searchInput = document.getElementById('watchlist-search');
+            if (!searchInput) return;
+            
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const stockItems = document.querySelectorAll('#watchlist-items .stock-item');
+            const noResults = document.getElementById('no-results');
+            let visibleCount = 0;
+
+            stockItems.forEach(item => {
+                const name = item.getAttribute('data-name') || '';
+                const symbol = item.getAttribute('data-symbol') || '';
+                const company = item.getAttribute('data-company') || '';
+                // Search in name, symbol, and company name
+                const searchText = (name + ' ' + symbol + ' ' + company).toLowerCase();
+
+                if (searchText.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Show/hide no results message
+            if (noResults) {
+                if (visibleCount === 0 && searchTerm.length > 0) {
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+            }
+
+            // Update count
+            const countElement = document.getElementById('watchlist-count');
+            if (countElement) {
+                countElement.textContent = visibleCount + '/100';
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            
+            // Reset search when showing watchlist screen
+            if (screenId === 'watchlist-screen') {
+                const searchInput = document.getElementById('watchlist-search');
+                if (searchInput) {
+                    searchInput.value = '';
+                    filterWatchlist();
+                }
+            }
+        }
+
+        function updateBottomNav(index) {
+            document.querySelectorAll('.bottom-nav-item').forEach((item, i) => {
+                if (i === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function setTradeAction(action) {
+            currentTradeAction = action;
+            const title = document.getElementById('trade-title');
+            if (title) {
+                title.textContent = (action === 'buy' ? 'Buy' : 'Sell') + ' RELIANCE';
+            }
+        }
+
+        function setOrderType(type) {
+            currentOrderType = type;
+            // Update UI
+            document.querySelectorAll('[id^="order-type-"]').forEach(el => {
+                el.textContent = el.textContent.replace('● ', '');
+                el.parentElement.parentElement.parentElement.style.borderColor = 'var(--neutral-200)';
+                el.parentElement.parentElement.parentElement.style.background = 'white';
+            });
+            
+            const selectedEl = document.getElementById('order-type-' + type.toLowerCase().replace(' ', '-'));
+            if (selectedEl) {
+                selectedEl.textContent = '● ' + type;
+                selectedEl.parentElement.parentElement.parentElement.style.borderColor = 'var(--primary-500)';
+                selectedEl.parentElement.parentElement.parentElement.style.background = 'var(--primary-50)';
+            }
+
+            // Show/hide price input
+            const priceInput = document.getElementById('price-input-group');
+            if (priceInput) {
+                priceInput.style.display = type === 'Market' ? 'none' : 'block';
+            }
+        }
+
+        function switchWatchlistTab(tab) {
+            document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            // In a real app, you would filter the watchlist items here
+        }
+
+        function switchOrderTab(tab) {
+            document.querySelectorAll('#orders-screen .tabs .tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            // In a real app, you would filter orders here
+        }
+
+        function switchPortfolioTab(tab) {
+            document.querySelectorAll('#portfolio-screen .tabs .tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            if (tab === 'positions') {
+                showScreen('positions-screen');
+            }
+        }
+
+        function setFundsAmount(amount) {
+            document.getElementById('funds-amount').value = amount;
+        }
+
+        function reviewOrder() {
+            const quantity = document.getElementById('trade-quantity').value;
+            const price = document.getElementById('trade-price').value || 2450;
+            const amount = quantity * price;
+            
+            if (quantity) {
+                document.getElementById('estimated-amount').style.display = 'flex';
+                document.getElementById('estimated-value').textContent = '₹' + amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            }
+            alert('Order Review:\n' + currentTradeAction.toUpperCase() + ' ' + quantity + ' shares\nType: ' + currentOrderType + '\nAmount: ₹' + amount.toLocaleString('en-IN'));
+        }
+
+        function cancelOrder() {
+            if (confirm('Are you sure you want to cancel this order?')) {
+                alert('Order cancelled');
+            }
+        }
+
+        // Calculate estimated amount on input
+        document.addEventListener('DOMContentLoaded', function() {
+            // Watchlist search
+            const watchlistSearch = document.getElementById('watchlist-search');
+            if (watchlistSearch) {
+                watchlistSearch.addEventListener('input', filterWatchlist);
+                watchlistSearch.addEventListener('keyup', filterWatchlist);
+            }
+
+            const quantityInput = document.getElementById('trade-quantity');
+            const priceInput = document.getElementById('trade-price');
+            
+            if (quantityInput) {
+                quantityInput.addEventListener('input', function() {
+                    const qty = parseFloat(this.value) || 0;
+                    const price = parseFloat(priceInput?.value || 2450);
+                    const amount = qty * price;
+                    
+                    const estimatedDiv = document.getElementById('estimated-amount');
+                    const estimatedValue = document.getElementById('estimated-value');
+                    
+                    if (qty > 0 && estimatedDiv && estimatedValue) {
+                        estimatedDiv.style.display = 'flex';
+                        estimatedValue.textContent = '₹' + amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    } else if (estimatedDiv) {
+                        estimatedDiv.style.display = 'none';
+                    }
+                });
+            }
+
+            if (priceInput) {
+                priceInput.addEventListener('input', function() {
+                    const qty = parseFloat(quantityInput?.value || 0);
+                    const price = parseFloat(this.value) || 0;
+                    const amount = qty * price;
+                    
+                    const estimatedDiv = document.getElementById('estimated-amount');
+                    const estimatedValue = document.getElementById('estimated-value');
+                    
+                    if (qty > 0 && price > 0 && estimatedDiv && estimatedValue) {
+                        estimatedDiv.style.display = 'flex';
+                        estimatedValue.textContent = '₹' + amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2/dist/purify.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #212121;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        
+        .content {
+            background: white;
+            border-radius: 12px;
+            padding: 48px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #757575;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        /* Markdown Styles */
+        .content h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 32px 0 24px 0;
+            color: #212121;
+            border-bottom: 3px solid #2196F3;
+            padding-bottom: 12px;
+        }
+        
+        .content h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 32px 0 20px 0;
+            color: #2196F3;
+        }
+        
+        .content h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 24px 0 16px 0;
+            color: #424242;
+        }
+        
+        .content h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 0 12px 0;
+            color: #616161;
+        }
+        
+        .content p {
+            margin: 16px 0;
+            line-height: 1.8;
+            color: #424242;
+        }
+        
+        .content ul, .content ol {
+            margin: 16px 0;
+            padding-left: 32px;
+        }
+        
+        .content li {
+            margin: 8px 0;
+            line-height: 1.8;
+        }
+        
+        .content code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+        
+        .content pre {
+            background: #263238;
+            color: #eeffff;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            font-size: 14px;
+        }
+        
+        .content blockquote {
+            border-left: 4px solid #2196F3;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #616161;
+            font-style: italic;
+        }
+        
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+        
+        .content table th,
+        .content table td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .content table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #212121;
+        }
+        
+        .content table tr:nth-child(even) {
+            background: #fafafa;
+        }
+        
+        .content hr {
+            border: none;
+            border-top: 2px solid #e0e0e0;
+            margin: 32px 0;
+        }
+        
+        .content a {
+            color: #2196F3;
+            text-decoration: none;
+        }
+        
+        .content a:hover {
+            text-decoration: underline;
+        }
+        
+        .content strong {
+            font-weight: 600;
+            color: #212121;
+        }
+        
+        .content em {
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .content {
+                padding: 24px;
+            }
+            
+            .content h1 {
+                font-size: 28px;
+            }
+            
+            .content h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="back-button">← Back to Home</a>
+            <h1 id="page-title">Loading...</h1>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="content" id="content">
+            <div class="loading">Loading document...</div>
+        </div>
+    </div>
+    
+    <script>
+        // Get file parameter from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const file = urlParams.get('file');
+        
+        if (!file) {
+            document.getElementById('content').innerHTML = 
+                '<div class="error">No file specified. Please go back and select a document.</div>';
+            document.getElementById('page-title').textContent = 'Error';
+        } else {
+            // Set page title
+            const fileName = file.replace('.md', '').replace(/-/g, ' ');
+            document.getElementById('page-title').textContent = fileName.charAt(0).toUpperCase() + fileName.slice(1);
+            
+            // Fetch and render markdown
+            fetch(file)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('File not found');
+                    }
+                    return response.text();
+                })
+                .then(markdown => {
+                    // Configure marked options
+                    marked.setOptions({
+                        breaks: true,
+                        gfm: true,
+                        headerIds: true,
+                        mangle: false
+                    });
+                    
+                    // Convert markdown to HTML
+                    const html = marked.parse(markdown);
+                    
+                    // Sanitize HTML for security
+                    const sanitized = DOMPurify.sanitize(html);
+                    
+                    // Render content
+                    document.getElementById('content').innerHTML = sanitized;
+                })
+                .catch(error => {
+                    document.getElementById('content').innerHTML = 
+                        '<div class="error">Error loading file: ' + error.message + '</div>';
+                });
+        }
+    </script>
+</body>
+</html>
+
