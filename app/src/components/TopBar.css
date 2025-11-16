@@ -1,0 +1,59 @@
+.top-bar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  max-width: 428px;
+  height: 56px;
+  background: white;
+  box-shadow: var(--shadow-1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-base);
+  z-index: 99;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.top-bar-back {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--neutral-900);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-bar-title {
+  color: var(--neutral-900);
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+}
+
+.top-bar-icon {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neutral-700);
+}
+
+.top-bar-icon:hover {
+  color: var(--primary-500);
+}
+
