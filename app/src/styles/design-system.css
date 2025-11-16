@@ -1,0 +1,219 @@
+/* Design System - Colors, Typography, Spacing */
+
+:root {
+  /* Primary Colors */
+  --primary-50: #E3F2FD;
+  --primary-100: #BBDEFB;
+  --primary-200: #90CAF9;
+  --primary-300: #64B5F6;
+  --primary-400: #42A5F5;
+  --primary-500: #2196F3;
+  --primary-600: #1E88E5;
+  --primary-700: #1976D2;
+  --primary-800: #1565C0;
+  --primary-900: #0D47A1;
+
+  /* Semantic Colors */
+  --success-50: #E8F5E9;
+  --success-500: #4CAF50;
+  --success-700: #388E3C;
+  --error-50: #FFEBEE;
+  --error-500: #F44336;
+  --error-700: #D32F2F;
+  --warning-50: #FFF3E0;
+  --warning-500: #FF9800;
+  --info-50: #E1F5FE;
+  --info-500: #03A9F4;
+
+  /* Market Colors */
+  --market-positive: #4CAF50;
+  --market-negative: #F44336;
+  --market-neutral: #757575;
+
+  /* Neutral Colors */
+  --neutral-50: #FAFAFA;
+  --neutral-100: #F5F5F5;
+  --neutral-200: #EEEEEE;
+  --neutral-300: #E0E0E0;
+  --neutral-400: #BDBDBD;
+  --neutral-500: #9E9E9E;
+  --neutral-600: #757575;
+  --neutral-700: #616161;
+  --neutral-800: #424242;
+  --neutral-900: #212121;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-base: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 24px;
+  --spacing-xxl: 32px;
+  --spacing-xxxl: 48px;
+
+  /* Border Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-base: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  /* Shadows */
+  --shadow-1: 0px 1px 2px rgba(0,0,0,0.05), 0px 1px 3px rgba(0,0,0,0.1);
+  --shadow-2: 0px 2px 4px rgba(0,0,0,0.05), 0px 4px 6px rgba(0,0,0,0.1);
+  --shadow-3: 0px 4px 6px rgba(0,0,0,0.05), 0px 10px 15px rgba(0,0,0,0.1);
+  --shadow-4: 0px 10px 15px rgba(0,0,0,0.05), 0px 20px 25px rgba(0,0,0,0.1);
+
+  /* Typography */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-primary);
+  background: var(--neutral-50);
+  color: var(--neutral-900);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Classes */
+.text-display-large {
+  font-size: 57px;
+  line-height: 64px;
+  font-weight: 400;
+  letter-spacing: -0.25px;
+}
+
+.text-display-medium {
+  font-size: 45px;
+  line-height: 52px;
+  font-weight: 400;
+}
+
+.text-display-small {
+  font-size: 36px;
+  line-height: 44px;
+  font-weight: 400;
+}
+
+.text-headline-large {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 400;
+}
+
+.text-headline-medium {
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 400;
+}
+
+.text-headline-small {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+}
+
+.text-title-large {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 500;
+}
+
+.text-title-medium {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: 0.15px;
+}
+
+.text-title-small {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+.text-body-large {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.text-body-medium {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+}
+
+.text-body-small {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.text-label-large {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+.text-label-medium {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.text-label-small {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Monospace for numbers */
+.text-mono {
+  font-family: var(--font-mono);
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.text-positive {
+  color: var(--market-positive);
+}
+
+.text-negative {
+  color: var(--market-negative);
+}
+
+.text-neutral {
+  color: var(--neutral-600);
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
